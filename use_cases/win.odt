@@ -1,0 +1,141 @@
+Main::InitOwn __CAD_STUB beg
+InitAppTest 0
+ImpExpPathManager1_0 RootPath found |..\_NANOCAE_DATA|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_3D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_2D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_1D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_0D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\D0_OBJECTS|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\CAD|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\EXPORT|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_3D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_2D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_1D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_0D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\ORIENTATIONS\LIB_3D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\ORIENTATIONS\LIB_2D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\ORIENTATIONS\LIB_1D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\NANOTUBE_LAYOUT|
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 beg
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 1A
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 1 0D177918
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 2
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 3
+AtomizerJobPackageXML::SetArrayNode NextCompID beg 1
+AtomizerJobPackageXML::SetArrayNode NextCompID end 1
+ODT_CLASS AtomizerJobBaseContainerXML::SetRootNodeXML SelectChild(0) 21AtomizerJobPackageXML
+SelectChild 0
+SelectChild Selected >= 0
+SelectChild After FindNode
+SelectChild Before FindLastNode
+XMLParamNode::FindLastNode
+SelectChild After FindLastNode
+SetSelected empty
+CrystalApplication1_0::SetProjectName |NONAME|
+ImpExpPathManager1_0::SetProjectName |NONAME|
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 end
+ShortApplicationStub::ShortApplicationStub beg
+ShortApplicationStub::ShortApplicationStub 1
+ShortApplicationStub::ShortApplicationStub 2
+ShortApplicationStub::ShortApplicationStub 3
+ShortApplicationStub::ShortApplicationStub end
+Main::InitOwn __CAD_STUB end
+BaseAtomicEditor1_0::CloseProject
+AtomizerJobPackageXML::SetArrayNode NextCompID beg 1
+AtomizerJobPackageXML::SetArrayNode NextCompID end 1
+ODT_CLASS AtomizerJobBaseContainerXML::SetRootNodeXML SelectChild(0) 21AtomizerJobPackageXML
+SelectChild 0
+SelectChild Selected >= 0
+SelectChild After FindNode
+SelectChild Before FindLastNode
+XMLParamNode::FindLastNode
+SelectChild After FindLastNode
+SetSelected empty
+CrystalApplication1_0::SetProjectName |NONAME|
+ImpExpPathManager1_0::SetProjectName |NONAME|
+CrystalApplication1_0::LoadAssembly beg AssemblyName ||
+BaseAtomicEditor1_0::CloseProject end
+NC_Wrapper::~NC_Wrapper end
+Main::InitOwn __CAD_STUB beg
+InitAppTest 0
+ImpExpPathManager1_0 RootPath found |..\_NANOCAE_DATA|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_3D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_2D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_1D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\UNIT_CELLS\LIB_0D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\D0_OBJECTS|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\CAD|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\EXPORT|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_3D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_2D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_1D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\MATERIALS\LIB_0D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\ORIENTATIONS\LIB_3D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\ORIENTATIONS\LIB_2D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\ORIENTATIONS\LIB_1D|
+ImpExpPathManager1_0::CreateSubDirFull |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\LIBRARY\NANOTUBE_LAYOUT|
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 beg
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 1A
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 1 0D177798
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 2
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 3
+AtomizerJobPackageXML::SetArrayNode NextCompID beg 1
+AtomizerJobPackageXML::SetArrayNode NextCompID end 1
+ODT_CLASS AtomizerJobBaseContainerXML::SetRootNodeXML SelectChild(0) 21AtomizerJobPackageXML
+SelectChild 0
+SelectChild Selected >= 0
+SelectChild After FindNode
+SelectChild Before FindLastNode
+XMLParamNode::FindLastNode
+SelectChild After FindLastNode
+SetSelected empty
+CrystalApplication1_0::SetProjectName |NONAME|
+ImpExpPathManager1_0::SetProjectName |NONAME|
+BaseAtomicEditor1_0::BaseAtomicEditor1_0 end
+ShortApplicationStub::ShortApplicationStub beg
+ShortApplicationStub::ShortApplicationStub 1
+ShortApplicationStub::ShortApplicationStub 2
+ShortApplicationStub::ShortApplicationStub 3
+ShortApplicationStub::ShortApplicationStub end
+Main::InitOwn __CAD_STUB end
+NC_Wrapper::NewProject
+BaseAtomicEditor1_0::NewProject
+BaseAtomicEditor1_0::CloseProject
+AtomizerJobPackageXML::SetArrayNode NextCompID beg 1
+AtomizerJobPackageXML::SetArrayNode NextCompID end 1
+ODT_CLASS AtomizerJobBaseContainerXML::SetRootNodeXML SelectChild(0) 21AtomizerJobPackageXML
+SelectChild 0
+SelectChild Selected >= 0
+SelectChild After FindNode
+SelectChild Before FindLastNode
+XMLParamNode::FindLastNode
+SelectChild After FindLastNode
+SetSelected empty
+CrystalApplication1_0::SetProjectName |NONAME|
+ImpExpPathManager1_0::SetProjectName |NONAME|
+CrystalApplication1_0::LoadAssembly beg AssemblyName ||
+BaseAtomicEditor1_0::CloseProject end
+CrystalApplication1_0::SetProjectName |NONAME|
+ImpExpPathManager1_0::SetProjectName |NONAME|
+BaseAtomicEditor1_0::SetAssemblyName ||
+CrystalApplication1_0::LoadAssembly beg AssemblyName ||
+NC_Wrapper::SaveProjectAs
+CrystalImpExp1_0::DeleteProject |SiliconDioxideNanosphere|
+CrystalImpExp1_0::DeleteProject Dir |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\SiliconDioxideNanosphere|
+BaseAtomicEditor1_0::SaveProjectAs |SiliconDioxideNanosphere|
+Debug ExportApplication
+CrystalImpExp1_0::CopyProject |SiliconDioxideNanosphere|
+CrystalImpExp1_0::CopyProject DirFrom |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\NONAME|
+CrystalImpExp1_0::CopyProject DirTo |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\SiliconDioxideNanosphere|
+CrystalImpExp1_0::CopyProject CMD |md "C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\SiliconDioxideNanosphere"|
+CrystalImpExp1_0::CopyProject CMD |xcopy /S /Y "C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\NONAME\*.*" "C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\SiliconDioxideNanosphere"|
+CrystalApplication1_0::SetProjectName |SiliconDioxideNanosphere|
+ImpExpPathManager1_0::SetProjectName |SiliconDioxideNanosphere|
+ImpExpPathManager1_0::GetFullPath Type 7 Address |SiliconDioxideNanosphere|
+BaseAtomicEditor1_0::SaveProjectAs Full Path |C:\Sgenia\Projects\simphony_git_repos\simphony-nCAD\_NANOCAE_DATA\JOBS\SiliconDioxideNanosphere.xml|
+CrystalApplication1_0::SaveProject
+ExportApplication
