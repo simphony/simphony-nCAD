@@ -19,6 +19,5 @@ setup(
   description = 'NCad Adapter for SimPhoNy',
   install_requires = ['simphony', 'cython'],
   cmdclass = {'build_ext': build_ext},
-  ext_modules = ext_modules,
-  py_modules = ['auxiliar.celldata_parser', 'auxiliar.symmetry', 'ncad_types']
+  ext_modules = ext_modules
 )
