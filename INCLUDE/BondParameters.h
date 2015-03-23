@@ -4,8 +4,9 @@
 /**@pkg _SERVICE */
 
 #include "Service.h"
+#include "AtomID.h"
 //==============================================================================
-/**Different types of bonds*/
+/**Different types of bonds */
 enum BondType
 {
   bondUndefined,

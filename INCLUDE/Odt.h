@@ -24,6 +24,7 @@ enum
   odtOpenClose,
 };
 
+/**Class for recording a log file  */
 class LOGRecorder
 {
 public:
@@ -48,6 +49,7 @@ protected:
   virtual void RecordODT(DWORD Level,const char *pBuf) = 0;
 };
 
+/**Class for recorder creator*/
 class LOGRecorderCreator
 {
 public:

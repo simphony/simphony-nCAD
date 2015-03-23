@@ -43,8 +43,8 @@ cdef extern from "NCadSimphonyWrapper.h":
         void EndAssembly()
         CParticleInfo* GetAssemblyParticleInfo(long long int id) except +get_error_cython
         CBondInfo* GetAssemblyBondInfo(long long int id) except +get_error_cython
-        void ProcessAssemblyParticle(CNCadParticle * pParticle)except +get_error_cython 
-        void ProcessAssemblyBond(CNCadBond * pBond) except +get_error_cython
+        void ProcessAssemblyParticle(CNCadParticle * pParticle, ID_TYPE Simphony_ID) except +get_error_cython 
+        void ProcessAssemblyBond(CNCadBond * pBond, ID_TYPE Simphony_ID) except +get_error_cython
         void LoadSession(string session);
 
 cdef extern from "NCadSimphonyWrapper.h":
@@ -56,14 +56,15 @@ cdef extern from "NCadSimphonyWrapper.h":
         CNCadParticleContainer() except +
         string name
         map[ID_TYPE, CNCadParticle*] particles
+        map[long long unsigned int, ID_TYPE] particles_reverse_ids
         map[ID_TYPE, CNCadBond*] bonds
-        void AddParticle(CNCadParticle *pParticle) except +get_error_cython
+        void AddParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID) except +get_error_cython
         void AddParticle(CParticleInfo &partInfo) except +get_error_cython
-        void AddBond(CNCadBond *bond) except +get_error_cython
+        void AddBond(CNCadBond *bond, ID_TYPE Simphony_ID) except +get_error_cython
         void AddBond(CBondInfo &bondInfo) except +get_error_cython
-        void UpdateParticle(CNCadParticle *pParticle) except +get_error_cython
+        void UpdateParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID) except +get_error_cython
         void UpdateParticle(CParticleInfo &partInfo) except +get_error_cython
-        void UpdateBond(CNCadBond *bond) except +get_error_cython
+        void UpdateBond(CNCadBond *bond, ID_TYPE Simphony_ID) except +get_error_cython
         void UpdateBond(CBondInfo &bondInfo) except +get_error_cython
         CParticleInfo * GetParticleInfo(ID_TYPE ParticleID) except +get_error_cython
         CBondInfo * GetBondInfo(ID_TYPE BondID) except +get_error_cython
@@ -85,7 +86,7 @@ cdef extern from "NCadSimphonyWrapper.h":
 cdef extern from "NCadSimphonyWrapper.h":
     cdef cppclass CNCadParticle:
         CNCadParticle() except +
-        ID_TYPE Simphony_ID
+        # ID_TYPE Simphony_ID
         long long int ID
         void SetParametersFull(double ax, double ay, double az,
                                const string& specie, const string&label)
@@ -98,7 +99,7 @@ cdef extern from "NCadSimphonyWrapper.h":
 cdef extern from "NCadSimphonyWrapper.h":
     cdef cppclass CNCadBond:
         CNCadBond() except +
-        ID_TYPE Simphony_ID
+        # ID_TYPE Simphony_ID
         long long int ID
         ID_TYPE atom1
         ID_TYPE atom2

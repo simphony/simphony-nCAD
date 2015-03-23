@@ -85,14 +85,10 @@ class CNCadParticle
 /**Class that represents a single particle / atom in the particle container.*/
 {
 public:
-    /**Simphony ID of the particle.*/
-    ID_TYPE Simphony_ID;
     /**Internal ID of the particle.*/
     id_t ID;
     /**Constructor.*/
     CNCadParticle();
-    /**Constructor given an internal ID.*/
-    CNCadParticle(ID_TYPE aID);
     /**Method to get a full independent copy of the particle.*/
     CNCadParticle * GetCopy();
 };
@@ -101,8 +97,6 @@ class CNCadBond
 /**Class that represents a single bond / atom in the bond container.*/
 {
 public:
-    /**Simphony ID of the bond.*/
-    ID_TYPE Simphony_ID;
     /**Internal ID of the bond.*/
     id_t ID;
     /**Simphony ID of the first particle of the bond.*/
@@ -121,7 +115,6 @@ class CNCadParticleContainer
 /**Class that represents the particle container entity inside ncad for
    Simphony usage.*/
 {
-
 public:
     /**Name of the particle container (unique within nCad adapter).*/
     string name;
@@ -131,6 +124,11 @@ public:
     /**map that keeps the Simphony_ID ---> Internal_ID correspondance for bonds.*/
     map<ID_TYPE, CNCadBond*> bonds;
 
+    /*This maps are implemented temporary to make faster the operation of retrieving bonds
+    from nCad when processing.*/
+    map<id_t, ID_TYPE> particles_reverse_ids;
+    // map<id_t, ID_TYPE> bonds_reverse_ids;
+    
     /**Constructor.*/
     CNCadParticleContainer();
     /**Destructor.*/
@@ -138,26 +136,26 @@ public:
     
     /**Adds a particle to the particles map.
     @param pParticle particle pointer to add.    */
-    virtual void AddParticle(CNCadParticle *pParticle);
+    virtual void AddParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID);
     /**Adds a particle to the particles map.
     @param partInfo particle to add.    */
     virtual void AddParticle(CParticleInfo &partInfo);
     /**Adds a bond to the particles map.
     @param pBond bond pointer to add.    */
-    virtual void AddBond(CNCadBond *pBond);
+    virtual void AddBond(CNCadBond *pBond, ID_TYPE Simphony_ID);
     /**Adds a bond to the particles map.
     @param bondInfo bond pointer to add.    */
     virtual void AddBond(CBondInfo &bondInfo);
     
     /**Updates a particle inside the particle container.
     @param pParticle particle to replace.*/
-    virtual void UpdateParticle(CNCadParticle *pParticle);
+    virtual void UpdateParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID);
     /**Updates a particle inside the particle container.
     @param partInfo particle to replace.*/
     virtual void UpdateParticle(CParticleInfo &partInfo);
     /**Updates a bond inside the particle container.
     @param pBond bond to replace.*/
-    virtual void UpdateBond(CNCadBond *pBond);
+    virtual void UpdateBond(CNCadBond *pBond, ID_TYPE Simphony_ID);
     /**Updates a bond inside the particle container.
     @param bondInfo bond to replace.*/
     virtual void UpdateBond(CBondInfo &bondInfo);
@@ -191,6 +189,8 @@ public:
     @param id the internal id of the particle.
     @returns the Simphony ID of the particle.*/
     virtual ID_TYPE GetParticleID(id_t id);
+    virtual ID_TYPE GetParticleIDByInternalID(id_t ID);
+    virtual ID_TYPE GetBondIDByInternalID(id_t ID){}
     
     /**Indicates whether a particle exists in the container.
     @param ParticleID particle id to check.
@@ -228,26 +228,26 @@ public:
     
     /**Adds a particle to the particles map.
     @param pParticle particle pointer to add.*/
-    void AddParticle(CNCadParticle *pParticle);
+    void AddParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID);
     /**Adds a particle to the particles map.
     @param partInfo particle to add.*/
     void AddParticle(CParticleInfo &partInfo);
     /**Adds a bond to the particles map.
     @param pBond bond pointer to add.*/
-    void AddBond(CNCadBond *pBond);
+    void AddBond(CNCadBond *pBond, ID_TYPE Simphony_ID);
     /**Adds a bond to the particles map.
     @param bondInfo bond pointer to add.*/
     void AddBond(CBondInfo &bondInfo);
     
     /**Updates a particle inside the particle container.
     @param pParticle particle to replace.*/
-    void UpdateParticle(CNCadParticle *pParticle);
+    void UpdateParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID);
     /**Updates a particle inside the particle container.
     @param partInfo particle to replace.*/
     void UpdateParticle(CParticleInfo &partInfo);
     /**Updates a bond inside the particle container.
     @param pBond bond to replace.*/
-    void UpdateBond(CNCadBond *pBond);
+    void UpdateBond(CNCadBond *pBond, ID_TYPE Simphony_ID);
     /**Updates a bond inside the particle container.
     @param bondInfo bond to replace.*/
     void UpdateBond(CBondInfo &bondInfo);
@@ -314,26 +314,26 @@ public:
     
     /**Adds a particle to the particles map.
     @param pParticle particle pointer to add.*/
-    void AddParticle(CNCadParticle *pParticle){}
+    void AddParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID){}
     /**Adds a particle to the particles map.
     @param partInfo particle to add.*/
     void AddParticle(CParticleInfo &partInfo);
     /**Adds a bond to the particles map.
     @param pBond bond pointer to add.*/
-    void AddBond(CNCadBond *pBond);
+    void AddBond(CNCadBond *pBond, ID_TYPE Simphony_ID);
     /**Adds a bond to the particles map.
     @param bondInfo bond pointer to add.*/
     void AddBond(CBondInfo &bondInfo);
     
     /**Updates a particle inside the particle container.
     @param pParticle particle to replace.*/
-    void UpdateParticle(CNCadParticle *pParticle){}
+    void UpdateParticle(CNCadParticle *pParticle, ID_TYPE Simphony_ID){}
     /**Updates a particle inside the particle container.
     @param partInfo particle to replace.*/
     void UpdateParticle(CParticleInfo &partInfo);
     /**Updates a bond inside the particle container.
     @param pBond bond to replace.*/
-    void UpdateBond(CNCadBond *pBond);
+    void UpdateBond(CNCadBond *pBond, ID_TYPE Simphony_ID);
     /**Updates a bond inside the particle container.
     @param bondInfo bond to replace.*/
     void UpdateBond(CBondInfo &bondInfo);
@@ -478,14 +478,13 @@ public:
     void BeginAssembly();
     /**Method that finish assembly processing.*/
     void EndAssembly();
-
     
     /**Special method to take a particle and insert a copy in the correspondent component after processing the assembly.
     @param pParticle the particle to process.*/
-    void ProcessAssemblyParticle(CNCadParticle * pParticle);
+    void ProcessAssemblyParticle(CNCadParticle * pParticle, ID_TYPE Simphony_ID);
     /**Special method to take a bond and insert a copy in the correspondent component after processing the assembly.
     @param pBond the bond to process.*/
-    void ProcessAssemblyBond(CNCadBond * pBond);
+    void ProcessAssemblyBond(CNCadBond * pBond, ID_TYPE Simphony_ID);
     /**Retrieves info of a particle of the assembly.
     @param id the internal id of the particle.
     @returns a CParticleInfo with the attributes of the particle.*/

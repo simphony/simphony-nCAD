@@ -40,7 +40,7 @@ class NC_Wrapper_GetAssemblyBonds : public NC_BondAction
     so we do a linear search in the original map of the nCad wrapper, and we store temporally the Internal_ID --- Simphony_ID
     correspondance in this temporal map, so if we processed a bond with internal atom ids that appeared previously, we can convert them
     faster.*/
-    map<id_t, ID_TYPE> id_table;
+    // map<id_t, ID_TYPE> id_table;
     /**We use this to generate a temporal fake id, so the bonds are retrieved and stored properly. The ids of the bonds will be replaced for
     Simphony ids (uuid.UUID).*/
     id_t current_id;
@@ -54,7 +54,7 @@ public:
     /**Method to retrieve the Simphony ID of a given internal id.
     @param id the internal id of the atom.
     */
-    ID_TYPE GetAtomID(id_t id);
+    // ID_TYPE GetAtomID(id_t id);
     /**The action method to perform.
     @param Bond the particle processed each step.
     */

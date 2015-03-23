@@ -11,6 +11,7 @@ import copy
 import uuid
 from ncad_types import SHAPE_TYPE, SYMMETRY_GROUP, AXIS_TYPE
 
+
 cdef class _NCadParticles:
     """Particle Container wrapper class for nCad adapter.
 
@@ -414,6 +415,7 @@ cdef class _NCadParticles:
 
     cdef _matchToParticle(self, c_ncad.CParticleInfo & part_info, p_to):
         p_to.uid = uuid.UUID(hex=part_info.id)
+        # p_to.uid = uuid.UUID(hex=id)
         p_to.coordinates[0] = part_info.x
         p_to.coordinates[1] = part_info.y
         p_to.coordinates[2] = part_info.z
@@ -880,6 +882,7 @@ cdef class nCad:
         cdef c_ncad.CParticleInfo *particle_info = NULL
         cdef c_ncad.CNCadParticle *cur_particle
         cdef map[c_ncad.ID_TYPE, c_ncad.CNCadParticle*] new_particles
+        cdef map[long long unsigned int, c_ncad.ID_TYPE] new_particles_reverse_ids
         while it != end:
             cur_particle = deref(it).second
             particle_info = self.thisptr.GetAssemblyParticleInfo(
@@ -892,12 +895,16 @@ cdef class nCad:
             pc_to.add_particle(new_particle)
             # Add to the component!
             new_id = new_particle.uid
-            cur_particle.Simphony_ID = new_id.hex
-            new_particles[cur_particle.Simphony_ID] = cur_particle
-            self.thisptr.ProcessAssemblyParticle(cur_particle)
+            # cur_particle.Simphony_ID = new_id.hex
+            simphony_id = new_id.hex
+            new_particles[simphony_id] = cur_particle
+            new_particles_reverse_ids[cur_particle.ID] = simphony_id
+            # print "HERETHERE ", simphony_id, cur_particle.ID
+            self.thisptr.ProcessAssemblyParticle(cur_particle, simphony_id)
             inc(it)
             c_ncad.delete_pointer(particle_info)
         pc_from.particles = new_particles
+        pc_from.particles_reverse_ids = new_particles_reverse_ids
         return pc_to
 
     cdef _newBondsFromAssembly(self, c_ncad.CNCadParticleContainer *pc_from,
@@ -914,14 +921,16 @@ cdef class nCad:
         cdef map[c_ncad.ID_TYPE, c_ncad.CNCadBond*] new_bonds
         while it != end:
             cur_bond = deref(it).second
+            # print cur_bond.atom1, cur_bond.atom2
             new_bond = p.Bond(particles=(uuid.UUID(hex=cur_bond.atom1),
                                          uuid.UUID(hex=cur_bond.atom2)))
             pc_to.add_bond(new_bond)
             # Add to the component!
             new_id = new_bond.uid
-            cur_bond.Simphony_ID = new_id.hex
-            new_bonds[cur_bond.Simphony_ID] = cur_bond
-            self.thisptr.ProcessAssemblyBond(cur_bond)
+            # cur_bond.Simphony_ID = new_id.hex
+            simphony_id = new_id.hex
+            new_bonds[simphony_id] = cur_bond
+            self.thisptr.ProcessAssemblyBond(cur_bond, simphony_id)
             inc(it)
         pc_from.bonds = new_bonds
         return pc_to

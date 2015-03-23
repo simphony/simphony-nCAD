@@ -3,6 +3,7 @@
 
 /**@pkg _NC_WRAPPER*/
 
+#define NC_WRAPPER_BUILT_AS_STATIC
 #include "NC_WRAPPER_Export.h"
 
 #include "Service.h"
