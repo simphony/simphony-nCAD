@@ -1,18 +1,18 @@
-import ncad as ncw
+import ncad.simncad as ncw
 import time
 from simphony.cuds.particles import Particles
 from simphony.core.cuba import CUBA
-from ncad_types import SHAPE_TYPE, AXIS_TYPE
-from auxiliar.celldata_parser import read_cd
+from ncad.auxiliar.ncad_types import SHAPE_TYPE, AXIS_TYPE
+from ncad.auxiliar.celldata_parser import read_cd
 
 
-ncad = ncw.nCad('SiliconDioxideNanosphere')
+nc = ncw.nCad('SiliconDioxideNanosphere')
 
 sio2 = read_cd('./cd/sio2_no_bonds.cd')
 
 options = {}
 options['type'] = 'cell'
-sio2 = ncad.add_particle_container(sio2, options)
+sio2 = nc.add_particle_container(sio2, options)
 # ncad.show('sio2')
 
 sphere = Particles('sio2-sphere')
@@ -21,16 +21,16 @@ data = sphere.data
 data[CUBA.NAME_UC] = "sio2_no_bonds"
 data[CUBA.SHAPE_TYPE] = SHAPE_TYPE.DIM_3D_SPHERE
 data[CUBA.SHAPE_CENTER] = (10,0,0)
-data[CUBA.SHAPE_RADIUS] = 100.0
+data[CUBA.SHAPE_RADIUS] = 25.0
 data[CUBA.CRYSTAL_ORIENTATION_1] = ((1,0,0), (0,0,1))
 data[CUBA.SHAPE_ORIENTATION_1] = (AXIS_TYPE.X, (0,1,0))
 sphere.data = data
 
 options['type'] = 'component'
-sphere = ncad.add_particle_container(sphere, options)
+sphere = nc.add_particle_container(sphere, options)
 
 t_init = time.clock()
-assembly = ncad.run()
+assembly = nc.run()
 t_final = time.clock()
 
 atoms_count = 0
@@ -46,6 +46,6 @@ print "N. atoms:     ", atoms_count
 print "N. bonds:     ", bonds_count
 
 
-ncad.show('sio2-sphere')
+nc.show('sio2-sphere')
 
 
