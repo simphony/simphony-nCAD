@@ -1,4 +1,4 @@
-import simncad.ncad_wrapper as ncw
+import simncad.ncad as ncw
 import time
 from simphony.cuds.particles import Particles
 from simphony.core.cuba import CUBA
@@ -8,7 +8,7 @@ from simncad.auxiliar.celldata_parser import read_cd
 
 nc = ncw.nCad('SiliconDioxideNanosphere')
 
-sio2 = read_cd('./cd/sio2_no_bonds.cd')
+sio2 = read_cd('../cd/sio2.cd')
 
 options = {}
 options['type'] = 'cell'
@@ -18,7 +18,7 @@ sio2 = nc.add_particle_container(sio2, options)
 sphere = Particles('sio2-sphere')
 
 data = sphere.data
-data[CUBA.NAME_UC] = "sio2_no_bonds"
+data[CUBA.NAME_UC] = "sio2"
 data[CUBA.MATERIAL_TYPE] = SHAPE_TYPE.DIM_3D_SPHERE
 data[CUBA.SHAPE_CENTER] = (10,0,0)
 data[CUBA.SHAPE_RADIUS] = 25.0
