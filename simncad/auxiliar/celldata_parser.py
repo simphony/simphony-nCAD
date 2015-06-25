@@ -42,7 +42,9 @@ def read_cd(file_name):
     if symmetry_number == -1:
     	symmetry_number = 1 #??? default value???
 
-    data[CUBA.SYMMETRY_GROUP] = symmetry_number
+    # COMMENTED FTM AS WE DONT HAVE SYMMETRY_GROUP OFFICIALY IN THE CUBA LIST -
+    # data[CUBA.SYMMETRY_GROUP] = symmetry_number
+    # -------------------------------------------------------------------------
 #OLD    data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
     tmp = f.readline()
 
@@ -67,8 +69,10 @@ def read_cd(file_name):
     #print c
 
     # """
-    data[CUBA.LATTICE_UC_ABC] = (a, b, c)
-    data[CUBA.LATTICE_UC_ANGLES] = (alpha, betta, gamma)
+    # COMMENTED FTM AS THESE ARE NOT OFFICIAL CUBA KEYWORDS -------------------
+    # data[CUBA.LATTICE_UC_ABC] = (a, b, c)
+    # data[CUBA.LATTICE_UC_ANGLES] = (alpha, betta, gamma)
+    # -------------------------------------------------------------------------
     cell.data = data
     # """
     tmp = f.readline()

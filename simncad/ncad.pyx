@@ -2,19 +2,17 @@ from libcpp.string cimport string
 from libcpp.map cimport map
 from cython.operator cimport dereference as deref, preincrement as inc
 
-# from simphony.core.data_container import DataContainer
-from ncad.auxiliar.data_container_ext import DataContainerExt
+from simphony.core.data_container import DataContainer
 import simphony.cuds.particles as p
 from simphony.core.cuba import CUBA
 cimport c_ncad
 
 import copy
 import uuid
-from ncad.auxiliar.ncad_types import (
+from auxiliar.ncad_types import (
     SHAPE_TYPE,
     SYMMETRY_GROUP,
-    AXIS_TYPE,
-    CUBA_EXT
+    AXIS_TYPE
 )
 
 
@@ -36,8 +34,7 @@ cdef class _NCadParticles:
 
     def __init__(self, *args):
         """Python constructor."""
-        # self._data = DataContainer()
-        self._data = DataContainerExt()
+        self._data = DataContainer()
 
     def __cinit__(self, *args):
         """Cython constructor.
@@ -340,48 +337,48 @@ cdef class _NCadParticles:
         """
         cdef c_ncad.CParticleContainerInfo pc_info
         pc_info = c_ncad.CParticleContainerInfo()
-        if CUBA_EXT.CRYSTAL_ORIENTATION_1 in new_data:
-            c_rot = new_data[CUBA_EXT.CRYSTAL_ORIENTATION_1]
-            pc_info.crystal_rotation11[0] = c_rot[0][0]
-            pc_info.crystal_rotation11[1] = c_rot[0][1]
-            pc_info.crystal_rotation11[2] = c_rot[0][2]
-            pc_info.crystal_rotation12[0] = c_rot[1][0]
-            pc_info.crystal_rotation12[1] = c_rot[1][1]
-            pc_info.crystal_rotation12[2] = c_rot[1][2]
-            if CUBA_EXT.CRYSTAL_ORIENTATION_2 in new_data:
-                c_rot = new_data[CUBA_EXT.CRYSTAL_ORIENTATION_2]
-                pc_info.crystal_rotation21[0] = c_rot[0][0]
-                pc_info.crystal_rotation21[1] = c_rot[0][1]
-                pc_info.crystal_rotation21[2] = c_rot[0][2]
-                pc_info.crystal_rotation22[0] = c_rot[1][0]
-                pc_info.crystal_rotation22[1] = c_rot[1][1]
-                pc_info.crystal_rotation22[2] = c_rot[1][2]
-        if CUBA_EXT.SHAPE_ORIENTATION_1 in new_data:
-            s_rot = new_data[CUBA_EXT.SHAPE_ORIENTATION_1]
-            pc_info.shape_info.rotation_axis1 = s_rot[0]
-            pc_info.shape_info.shape_rotation1[0] = s_rot[1][0]
-            pc_info.shape_info.shape_rotation1[1] = s_rot[1][1]
-            pc_info.shape_info.shape_rotation1[2] = s_rot[1][2]
-            if CUBA_EXT.SHAPE_ORIENTATION_2 in new_data:
-                s_rot = new_data[CUBA_EXT.SHAPE_ORIENTATION_2]
-                pc_info.shape_info.rotation_axis2 = s_rot[0]
-                pc_info.shape_info.shape_rotation2[0] = s_rot[1][0]
-                pc_info.shape_info.shape_rotation2[1] = s_rot[1][1]
-                pc_info.shape_info.shape_rotation2[2] = s_rot[1][2]
-        if CUBA_EXT.LATTICE_UC_ABC in new_data:
-            abc = new_data[CUBA_EXT.LATTICE_UC_ABC]
-            pc_info.a = abc[0]
-            pc_info.b = abc[1]
-            pc_info.c = abc[2]
-        if CUBA_EXT.LATTICE_UC_ANGLES in new_data:
-            angles = new_data[CUBA_EXT.LATTICE_UC_ANGLES]
-            pc_info.alpha = angles[0]
-            pc_info.beta = angles[1]
-            pc_info.gamma = angles[2]
-        if CUBA_EXT.SYMMETRY_GROUP in new_data:
-            pc_info.symmetry_group = new_data[CUBA_EXT.SYMMETRY_GROUP]
-        if CUBA_EXT.SHAPE_TYPE in new_data:
-            pc_info.shape_info.shape = new_data[CUBA_EXT.SHAPE_TYPE]
+        # if CUBA.CRYSTAL_ORIENTATION_1 in new_data:
+            # c_rot = new_data[CUBA.CRYSTAL_ORIENTATION_1]
+            # pc_info.crystal_rotation11[0] = c_rot[0][0]
+            # pc_info.crystal_rotation11[1] = c_rot[0][1]
+            # pc_info.crystal_rotation11[2] = c_rot[0][2]
+            # pc_info.crystal_rotation12[0] = c_rot[1][0]
+            # pc_info.crystal_rotation12[1] = c_rot[1][1]
+            # pc_info.crystal_rotation12[2] = c_rot[1][2]
+            # if CUBA.CRYSTAL_ORIENTATION_2 in new_data:
+                # c_rot = new_data[CUBA.CRYSTAL_ORIENTATION_2]
+                # pc_info.crystal_rotation21[0] = c_rot[0][0]
+                # pc_info.crystal_rotation21[1] = c_rot[0][1]
+                # pc_info.crystal_rotation21[2] = c_rot[0][2]
+                # pc_info.crystal_rotation22[0] = c_rot[1][0]
+                # pc_info.crystal_rotation22[1] = c_rot[1][1]
+                # pc_info.crystal_rotation22[2] = c_rot[1][2]
+        # if CUBA.SHAPE_ORIENTATION_1 in new_data:
+            # s_rot = new_data[CUBA.SHAPE_ORIENTATION_1]
+            # pc_info.shape_info.rotation_axis1 = s_rot[0]
+            # pc_info.shape_info.shape_rotation1[0] = s_rot[1][0]
+            # pc_info.shape_info.shape_rotation1[1] = s_rot[1][1]
+            # pc_info.shape_info.shape_rotation1[2] = s_rot[1][2]
+            # if CUBA.SHAPE_ORIENTATION_2 in new_data:
+                # s_rot = new_data[CUBA.SHAPE_ORIENTATION_2]
+                # pc_info.shape_info.rotation_axis2 = s_rot[0]
+                # pc_info.shape_info.shape_rotation2[0] = s_rot[1][0]
+                # pc_info.shape_info.shape_rotation2[1] = s_rot[1][1]
+                # pc_info.shape_info.shape_rotation2[2] = s_rot[1][2]
+        # if CUBA.LATTICE_UC_ABC in new_data:
+            # abc = new_data[CUBA.LATTICE_UC_ABC]
+            # pc_info.a = abc[0]
+            # pc_info.b = abc[1]
+            # pc_info.c = abc[2]
+        # if CUBA.LATTICE_UC_ANGLES in new_data:
+            # angles = new_data[CUBA.LATTICE_UC_ANGLES]
+            # pc_info.alpha = angles[0]
+            # pc_info.beta = angles[1]
+            # pc_info.gamma = angles[2]
+        # if CUBA.SYMMETRY_GROUP in new_data:
+            # pc_info.symmetry_group = new_data[CUBA.SYMMETRY_GROUP]
+        if CUBA.MATERIAL_TYPE in new_data:
+            pc_info.shape_info.shape = new_data[CUBA.MATERIAL_TYPE]
         if CUBA.SHAPE_CENTER in new_data:
             center = new_data[CUBA.SHAPE_CENTER]
             pc_info.shape_info.centerX = center[0]
@@ -426,8 +423,7 @@ cdef class _NCadParticles:
         p_to.coordinates[0] = part_info.x
         p_to.coordinates[1] = part_info.y
         p_to.coordinates[2] = part_info.z
-        # p_to.data = DataContainer()
-        p_to.data = DataContainerExt()
+        p_to.data = DataContainer()
         p_to.data[CUBA.CHEMICAL_SPECIE] = part_info.specie
         p_to.data[CUBA.LABEL] = part_info.label
         p_to.data[CUBA.OCCUPANCY] = part_info.occupancy
@@ -752,36 +748,61 @@ cdef class nCad:
         # all; using this schema we let the adapter deal with the shape and
         # we avoid wrapping all the shape classes of the API
         cdef c_ncad.CParticleContainerInfo pc_info
-        if CUBA.CRYSTAL_ORIENTATION_1 in new_component.data:
-            c_rot = new_component.data[CUBA.CRYSTAL_ORIENTATION_1]
-            pc_info.crystal_rotation11[0] = c_rot[0][0]
-            pc_info.crystal_rotation11[1] = c_rot[0][1]
-            pc_info.crystal_rotation11[2] = c_rot[0][2]
-            pc_info.crystal_rotation12[0] = c_rot[1][0]
-            pc_info.crystal_rotation12[1] = c_rot[1][1]
-            pc_info.crystal_rotation12[2] = c_rot[1][2]
-            if CUBA.CRYSTAL_ORIENTATION_2 in new_component.data:
-                c_rot = new_component.data[CUBA.CRYSTAL_ORIENTATION_2]
-                pc_info.crystal_rotation21[0] = c_rot[0][0]
-                pc_info.crystal_rotation21[1] = c_rot[0][1]
-                pc_info.crystal_rotation21[2] = c_rot[0][2]
-                pc_info.crystal_rotation22[0] = c_rot[1][0]
-                pc_info.crystal_rotation22[1] = c_rot[1][1]
-                pc_info.crystal_rotation22[2] = c_rot[1][2]
-        # SHAPE_TYPE IS MANDATORY!
-        pc_info.shape_info.shape = new_component.data[CUBA.SHAPE_TYPE]
-        if CUBA.SHAPE_ORIENTATION_1 in new_component.data:
-            s_rot = new_component.data[CUBA.SHAPE_ORIENTATION_1]
-            pc_info.shape_info.rotation_axis1 = s_rot[0]
-            pc_info.shape_info.shape_rotation1[0] = s_rot[1][0]
-            pc_info.shape_info.shape_rotation1[1] = s_rot[1][1]
-            pc_info.shape_info.shape_rotation1[2] = s_rot[1][2]
-            if CUBA.SHAPE_ORIENTATION_2 in new_component.data:
-                s_rot = new_component.data[CUBA.SHAPE_ORIENTATION_2]
-                pc_info.shape_info.rotation_axis2 = s_rot[0]
-                pc_info.shape_info.shape_rotation2[0] = s_rot[1][0]
-                pc_info.shape_info.shape_rotation2[1] = s_rot[1][1]
-                pc_info.shape_info.shape_rotation2[2] = s_rot[1][2]
+        # MATERIAL_TYPE IS MANDATORY!
+        pc_info.shape_info.shape = new_component.data[CUBA.MATERIAL_TYPE]
+        
+        # Non-approved CUBA keywords -----------------------------------------
+        # if CUBA.CRYSTAL_ORIENTATION_1 in new_component.data:
+            # c_rot = new_component.data[CUBA.CRYSTAL_ORIENTATION_1]
+            # pc_info.crystal_rotation11[0] = c_rot[0][0]
+            # pc_info.crystal_rotation11[1] = c_rot[0][1]
+            # pc_info.crystal_rotation11[2] = c_rot[0][2]
+            # pc_info.crystal_rotation12[0] = c_rot[1][0]
+            # pc_info.crystal_rotation12[1] = c_rot[1][1]
+            # pc_info.crystal_rotation12[2] = c_rot[1][2]
+            # if CUBA.CRYSTAL_ORIENTATION_2 in new_component.data:
+                # c_rot = new_component.data[CUBA.CRYSTAL_ORIENTATION_2]
+                # pc_info.crystal_rotation21[0] = c_rot[0][0]
+                # pc_info.crystal_rotation21[1] = c_rot[0][1]
+                # pc_info.crystal_rotation21[2] = c_rot[0][2]
+                # pc_info.crystal_rotation22[0] = c_rot[1][0]
+                # pc_info.crystal_rotation22[1] = c_rot[1][1]
+                # pc_info.crystal_rotation22[2] = c_rot[1][2]
+        # if CUBA.SHAPE_ORIENTATION_1 in new_component.data:
+            # s_rot = new_component.data[CUBA.SHAPE_ORIENTATION_1]
+            # pc_info.shape_info.rotation_axis1 = s_rot[0]
+            # pc_info.shape_info.shape_rotation1[0] = s_rot[1][0]
+            # pc_info.shape_info.shape_rotation1[1] = s_rot[1][1]
+            # pc_info.shape_info.shape_rotation1[2] = s_rot[1][2]
+            # if CUBA.SHAPE_ORIENTATION_2 in new_component.data:
+                # s_rot = new_component.data[CUBA.SHAPE_ORIENTATION_2]
+                # pc_info.shape_info.rotation_axis2 = s_rot[0]
+                # pc_info.shape_info.shape_rotation2[0] = s_rot[1][0]
+                # pc_info.shape_info.shape_rotation2[1] = s_rot[1][1]
+                # pc_info.shape_info.shape_rotation2[2] = s_rot[1][2]
+        # --------------------------------------------------------------------
+        pc_info.crystal_rotation11[0] = 0.0
+        pc_info.crystal_rotation11[1] = 0.0
+        pc_info.crystal_rotation11[2] = 0.0
+        pc_info.crystal_rotation12[0] = 0.0
+        pc_info.crystal_rotation12[1] = 0.0
+        pc_info.crystal_rotation12[2] = 0.0
+        pc_info.crystal_rotation21[0] = 0.0
+        pc_info.crystal_rotation21[1] = 0.0
+        pc_info.crystal_rotation21[2] = 0.0
+        pc_info.crystal_rotation22[0] = 0.0
+        pc_info.crystal_rotation22[1] = 0.0
+        pc_info.crystal_rotation22[2] = 0.0
+        pc_info.shape_info.rotation_axis1 = AXIS_TYPE.X
+        pc_info.shape_info.shape_rotation1[0] = 0.0
+        pc_info.shape_info.shape_rotation1[1] = 0.0
+        pc_info.shape_info.shape_rotation1[2] = 0.0
+        pc_info.shape_info.rotation_axis2 = AXIS_TYPE.X
+        pc_info.shape_info.shape_rotation2[0] = 0.0
+        pc_info.shape_info.shape_rotation2[1] = 0.0
+        pc_info.shape_info.shape_rotation2[2] = 0.0
+        # --------------------------------------------------------------------
+        
         if CUBA.SHAPE_CENTER in new_component.data:
             center = new_component.data[CUBA.SHAPE_CENTER]
             pc_info.shape_info.centerX = center[0]
@@ -824,15 +845,15 @@ cdef class nCad:
             raise Exception('Duplicated particle container cell: {}'
                             .format(new_cell.name))
         cdef _NCadParticles ncpc = _NCadParticles('cell')
-        abc = new_cell.data[CUBA.LATTICE_UC_ABC]
-        a = abc[0]
-        b = abc[1]
-        c = abc[2]
-        angles = new_cell.data[CUBA.LATTICE_UC_ANGLES]
-        alpha = angles[0]
-        beta = angles[1]
-        gamma = angles[2]
-        symmetry_gn = new_cell.data[CUBA.SYMMETRY_GROUP]
+        # abc = new_cell.data[CUBA.LATTICE_UC_ABC]
+        a = 6.0 # abc[0]
+        b = 6.0 # abc[1]
+        c = 6.0 # abc[2]
+        # angles = new_cell.data[CUBA.LATTICE_UC_ANGLES]
+        alpha = 90.0 # angles[0]
+        beta = 90.0 # angles[1]
+        gamma = 90.0 # angles[2]
+        symmetry_gn = SYMMETRY_GROUP.P1 # new_cell.data[CUBA.SYMMETRY_GROUP]
         ncpc.thisptr.name = new_cell.name
         # --------------------------------------------------------------------
         self.thisptr.AddCell(<c_ncad.CNCadParticleContainer*>(ncpc.thisptr),
