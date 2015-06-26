@@ -41,8 +41,7 @@ setup(
   description = 'NCad Wrapper for SimPhoNy',
   long_description = README_TEXT,
   packages = find_packages(),
-  install_requires = ['cython >= 0.21'],
-  # install_requires = ['simphony >= 0.1.1', 'cython >= 0.21'],
+  install_requires = ['simphony', 'cython >= 0.21'],
   entry_points = {'simphony.engine': [ 'ncad_wrapper = simncad']
                   },
   cmdclass = {'build_ext': build_ext},
