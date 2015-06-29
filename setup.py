@@ -10,7 +10,7 @@ ncad_include_path = "./simncad/INCLUDE"
 with open('README.md', 'r') as readme:
     README_TEXT = readme.read()
 
-VERSION = '0.1.1.dev0'
+VERSION = '0.1.21.dev0'
 
 def write_version_py(filename=None):
     if filename is None:
@@ -31,7 +31,7 @@ ext_modules = [Extension("simncad.ncad",
                          "./simncad/src/error_handlers.cpp"],
                         include_dirs = [ncad_include_path, simphony_include_path, "./simncad"],
                         language='c++',
-                        extra_objects=["libNCad.dll"])]
+                        extra_objects=["C:\NCad\libNCad.dll"])]
 
 
 setup(
