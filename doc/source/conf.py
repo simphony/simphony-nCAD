@@ -260,7 +260,7 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # Read-the-docs Mock, so we can build the documentation:
-from unittest.mock import MagicMock
+from mock import Mock as MagicMock
 
 class Mock(MagicMock):
     @classmethod
