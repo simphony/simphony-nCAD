@@ -267,7 +267,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['simncad']
+MOCK_MODULES = ['simncad', 'simncad.auxiliar', 'simncad.ncad', 'simncad.tests']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
