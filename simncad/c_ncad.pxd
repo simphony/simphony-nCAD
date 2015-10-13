@@ -72,6 +72,8 @@ cdef extern from "NCadSimphonyWrapper.h":
         void RemoveBond(ID_TYPE bond_id) except +get_error_cython
         bool HasParticle(ID_TYPE ParticleID)
         bool HasBond(ID_TYPE BondID)
+        int GetNParticles()
+        int GetNBonds()
         CNCadParticleContainer * GetCopy()
         void Update(CParticleContainerInfo &pc_info) except +get_error_cython
         

@@ -201,6 +201,14 @@ public:
     @returns True if the bond is inside, False otherwise.*/
     virtual bool HasBond(ID_TYPE BondID);
 
+    /**Returns the current number of particles inside the container.
+    @returns number of particles as integer.*/
+    virtual int GetNParticles();
+
+    /**Returns the current number of bonds inside the container.
+    @returns number of bonds as integer.*/
+    virtual int GetNBonds();
+
     /**Creates a full copy of the particle container.
     @returns a new allocated CNCadParticleContainer pointer.*/
     virtual CNCadParticleContainer * GetCopy();

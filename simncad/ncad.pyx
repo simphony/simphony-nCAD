@@ -5,6 +5,7 @@ from cython.operator cimport dereference as deref, preincrement as inc
 from simphony.core.data_container import DataContainer
 import simphony.cuds.particles as p
 from simphony.core.cuba import CUBA
+from simphony.core.cuds_item import CUDSItem
 cimport c_ncad
 
 import copy
@@ -63,7 +64,49 @@ cdef class _NCadParticles:
 
     # Common ABC interface ====================================================
     # =========================================================================
-    def add_particle(self, particle):
+    def add_particles(self, iterable):
+        """Adds a set of particles from the provided iterable
+        to the container.
+
+        If any particle have no uids, the container
+        will generate a new uids for it. If the particle has
+        already an uids, it won't add the particle if a particle
+        with the same uid already exists. If the user wants to replace
+        an existing particle in the container there is an 'update_particles'
+        method for that purpose.
+
+        Parameters
+        ----------
+        iterable : iterable of Particle objects
+            the new set of particles that will be included in the container.
+
+        Returns
+        -------
+        uids : list of uuid.UUID
+            The uids of the added particles.
+
+        Raises
+        ------
+        ValueError :
+            when there is a particle with an uids that already exists
+            in the container.
+
+        Examples
+        --------
+        Add a set of particles to a Particles container.
+
+        >>> particle_list = [Particle(), Particle()]
+        >>> particles = Particles(name="foo")
+        >>> uids = particles.add_particles(particle_list)
+
+        """
+        res = []
+        for particle in iterable:
+            res.append(self._add_particle(particle))
+        return res
+
+    
+    def _add_particle(self, particle):
         """Adds the particle to the container.
 
         Parameters
@@ -87,7 +130,46 @@ cdef class _NCadParticles:
         self.thisptr.AddParticle(part_info)
         return particle.uid
 
-    def add_bond(self, bond):
+    def add_bonds(self, iterable):  # pragma: no cover
+        """Adds a set of bonds to the container.
+
+        Also like with particles, if any bond has a defined uid,
+        it won't add the bond if a bond with the same uid already exists, and
+        if the bond has no uid the particle container will generate an
+        uid. If the user wants to replace an existing bond in the
+        container there is an 'update_bonds' method for that purpose.
+
+        Parameters
+        ----------
+        iterable : iterable of Bond objects
+            the new bond that will be included in the container.
+
+        Returns
+        -------
+        uuid : list of uuid.UUID
+            The uuids of the added bonds.
+
+        Raises
+        ------
+        ValueError :
+            when there is a bond with an uuid that already exists
+            in the container.
+
+        Examples
+        --------
+        Add a set of bonds to a Particles container.
+
+        >>> bonds_list = [Bond(), Bond()]
+        >>> particles = Particles(name="foo")
+        >>> particles.add_bonds(bonds_list)
+
+        """
+        res = []
+        for bond in iterable:
+            res.append(self._add_bond(bond))
+        return res
+
+    def _add_bond(self, bond):
         """Adds the bond to the container.
 
         Parameters
@@ -111,7 +193,39 @@ cdef class _NCadParticles:
         self.thisptr.AddBond(bond_info)
         return bond.uid
 
-    def update_particle(self, particle):
+    def update_particles(self, iterable):  # pragma: no cover
+        """Updates a set of particles from the provided iterable.
+
+        Takes the uids of the particles and searches inside the container for
+        those particles. If the particles exists, they are replaced in the
+        container. If any particle doesn't exist, it will raise an exception.
+
+        Parameters
+        ----------
+
+        iterable : iterable of Particle objects
+            the particles that will be replaced.
+
+        Raises
+        ------
+        ValueError :
+            If any particle inside the iterable does not exist.
+
+        Examples
+        --------
+        Given a set of Particle objects that already exists in the container
+        (taken with the 'get_particle' method for example), just call the
+        function passing the Particle items as parameter.
+
+        >>> part_container = Particles(name="foo")
+        >>> ... #do whatever you want with the particles
+        >>> part_container.update_particles([part1, part2])
+
+        """
+        for particle in iterable:
+            self._update_particle(particle)
+
+    def _update_particle(self, particle):
         """Updates the particle inside the container.
 
         Parameters
@@ -128,7 +242,41 @@ cdef class _NCadParticles:
         self._matchFromParticle(particle, part_info)
         self.thisptr.UpdateParticle(part_info)
 
-    def update_bond(self, bond):
+    def update_bonds(self, iterable):  # pragma: no cover
+        """Updates a set of bonds from the provided iterable.
+
+        Takes the uids of the bonds and searches inside the container for
+        those bond. If the bonds exists, they are replaced in the container.
+        If any bond doesn't exist, it will raise an exception.
+
+        Parameters
+        ----------
+        iterable : iterable of Bond objects
+            the bonds that will be replaced.
+
+        Raises
+        ------
+        ValueError :
+            If any bond doesn't exist.
+
+        Examples
+        --------
+        Given a set of Bond objects that already exists in the container
+        (taken with the 'get_bond' method for example) just call the
+        function passing the set of Bond as parameter.
+
+        >>> particles = Particles(name="foo")
+        >>> ...
+        >>> bond1 = particles.get_bond(uid1)
+        >>> bond2 = particles.get_bond(uid2)
+        >>> ... #do whatever you want with the bonds
+        >>> particles.update_bonds([bond1, bond2])
+
+        """
+        for bond in iterable:
+            self._update_bond(bond)
+
+    def _update_bond(self, bond):
         """Updates the bond inside the container.
 
         Parameters
@@ -203,7 +351,36 @@ cdef class _NCadParticles:
         else:
             raise Exception("Bond {0} not found!".format(uid))
 
-    def remove_particle(self, uid):
+    def remove_particles(self, uids):  # pragma: no cover
+        """Remove the particles with the provided uids from the container.
+
+        The uids inside the iterable should exists in the container. Otherwise
+        an exception will be raised.
+
+        Parameters
+        ----------
+        uid : uuid.UUID
+            the uid of the particle to be removed.
+
+        Raises
+        ------
+        KeyError :
+           If any particle doesn't exist.
+
+
+        Examples
+        --------
+        Having a set of uids of existing particles, pass it to the method.
+
+        >>> particles = Particles(name="foo")
+        >>> ...
+        >>> particles.remove_particles([uid1, uid2])
+
+        """
+        for uid in uids:
+            self._remove_particle(uid)
+
+    def _remove_particle(self, uid):
         """Deletes the particle from the container.
 
         Parameters
@@ -218,7 +395,30 @@ cdef class _NCadParticles:
         """
         self.thisptr.RemoveParticle(uid.hex)
 
-    def remove_bond(self, uid):
+    def remove_bonds(self, uids):  # pragma: no cover
+        """Remove the bonds with the provided uids.
+
+        The uids passed as parameter should exists in the container. If
+        any uid doesn't exist, an exception will be raised.
+
+        Parameters
+        ----------
+        uids : uuid.UUID
+            the uid of the bond to be removed.
+
+        Examples
+        --------
+        Having a set of uids of existing bonds, pass it to the method.
+
+        >>> particles = Particles(name="foo")
+        >>> ...
+        >>> particles.remove_bonds([uid1, uid2])
+
+        """
+        for uid in uids:
+            self._remove_bond(uid)
+
+    def _remove_bond(self, uid):
         """Deletes the bond from the container.
 
         Parameters
@@ -263,49 +463,76 @@ cdef class _NCadParticles:
         """
         return self.thisptr.HasBond(id.hex)
 
-    def iter_particles(self, ids=None):
+    def iter_particles(self, uids=None):
         """Iterates over the given particles of the container; if parameter is
         omitted, it will iterate over all particles inside.
 
         Parameters
         ----------
-        ids : iterable
-            sequence with the ids to iterate.
+        uids : iterable
+            sequence with the uids to iterate.
 
         Raises
         ------
-        Exception if any of the ids is not in the container.
+        Exception if any of the uids is not in the container.
 
         """
-        if ids:
+        if uids:
             try:
-                return self._iter_some_particles(ids)
+                return self._iter_some_particles(uids)
             except KeyError as exception:
                 raise exception
         else:
             return self._iter_all_particles()
 
-    def iter_bonds(self, ids=None):
+    def iter_bonds(self, uids=None):
         """Iterates over the given bonds of the container; if parameter is
         omitted, it will iterate over all bonds inside.
 
         Parameters
         ----------
-        ids : iterable
-            sequence with the ids to iterate.
+        uids : iterable
+            sequence with the uids to iterate.
 
         Raises
         ------
-        Exception if any of the ids is not in the container.
+        Exception if any of the uids is not in the container.
 
         """
-        if ids:
+        if uids:
             try:
-                return self._iter_some_bonds(ids)
+                return self._iter_some_bonds(uids)
             except KeyError as exception:
                 raise exception
         else:
             return self._iter_all_bonds()
+
+    def count_of(self, item_type): 
+        """ Return the count of item_type in the container. 
+
+        Parameter 
+        --------- 
+        item_type : CUDSItem 
+           The CUDSItem enum of the type of the items to return the count of. 
+
+        Returns 
+        ------- 
+        count : int 
+           The number of items of item_type in the container. 
+
+        Raises 
+        ------ 
+        ValueError : 
+            If the type of the item is not supported in the current 
+            container. 
+
+        """
+        if item_type == CUDSItem.PARTICLE:
+            return self.thisptr.GetNParticles()
+        elif item_type == CUDSItem.BOND:
+            return self.thisptr.GetNBonds()
+        else:
+            raise TypeError('type {0} not supported'.format(item_type))
 
     # Additional methods ======================================================
     # =========================================================================
@@ -573,7 +800,28 @@ cdef class nCad:
         del assembly
         return res
 
-    def add_particle_container(self, pc, options=None):
+    def add_dataset(self, container, options=None):
+        """Add a CUDS container
+
+        Parameters
+        ----------
+        container : {ABCMesh, ABCParticles, ABCLattice}
+            The CUDS container to add to the engine.
+
+        Raises
+        ------
+        TypeError:
+            If the container type is not supported by the engine.
+        ValueError:
+            If there is already a dataset with the given name.
+
+        """
+        if isinstance(container, p.ABCParticles):
+            return self._add_particle_container(container, options)
+        else:
+            raise TypeError('Not an ABCParticles item received.')
+
+    def _add_particle_container(self, pc, options=None):
         """Adds a new particle container to nCad. It will be treated as
         a cell or a component depending of the options['type'] parameter.
 
@@ -613,7 +861,29 @@ cdef class nCad:
             raise Exception('Error: "type" parameter was incorrect '
                             '(type="component" or type="cell")')
 
-    def get_particle_container(self, name):
+    def get_dataset(self, name):
+        """ Get the dataset
+
+        Parameters
+        ----------
+        name: str
+            name of CUDS container to be retrieved.
+
+        Returns
+        -------
+        container :
+            A proxy of the dataset named ``name`` that is stored
+            internally in the Engine.
+
+        Raises
+        ------
+        ValueError:
+            If there is no dataset with the given name
+
+        """
+        return self._get_particle_container(name)
+    
+    def _get_particle_container(self, name):
         """Returns a _NCadParticles instance of the requested pc.
 
         Parameters
@@ -639,7 +909,23 @@ cdef class nCad:
                 raise KeyError('Particle Container "{0}" not found!'
                                 .format(name))
 
-    def delete_particle_container(self, name):
+    def remove_dataset(self, name):
+        """ Remove a dataset from the internal
+
+        Parameters
+        ----------
+        name: str
+            name of CUDS container to be deleted
+
+        Raises
+        ------
+        ValueError:
+            If there is no dataset with the given name
+
+        """
+        self._delete_particle_container(name)
+
+    def _delete_particle_container(self, name):
         """Deletes a particle container added to the current session of nCad.
 
         Parameters
@@ -659,7 +945,19 @@ cdef class nCad:
         else:
             raise KeyError('Particle Container "{0}" not found!'.format(name))
 
-    def iter_particle_containers(self, names=None):
+    def iter_datasets(self, names=None):
+        """ Returns an iterator over a subset or all of the containers.
+
+        Parameters
+        ----------
+        names : sequence of str, optional
+            names of specific containers to be iterated over. If names is not
+            given, then all containers will be iterated over.
+
+        """
+        return self._iter_particle_containers(names)
+
+    def _iter_particle_containers(self, names=None):
         """Iters over the given particle containers; if names is None, it will
         iterate over all.
 
@@ -874,7 +1172,7 @@ cdef class nCad:
     def _iter_some_particle_containers(self, cur_names):
         for cur_name in cur_names:
             try:
-                yield self.get_particle_container(cur_name)
+                yield self._get_particle_container(cur_name)
             except KeyError as e:
                 raise e
 
@@ -893,10 +1191,12 @@ cdef class nCad:
         except AttributeError as exc:
             pass
         pc_to._data = pc_from.data
-        for p in pc_from.iter_particles():
-            pc_to.add_particle(p)
-        for b in pc_from.iter_bonds():
-            pc_to.add_bond(b)
+        pc_to.add_particles(pc_from.iter_particles())
+        pc_to.add_bonds(pc_from.iter_bonds())
+        # for p in pc_from.iter_particles():
+            # pc_to.add_particle(p)
+        # for b in pc_from.iter_bonds():
+            # pc_to.add_bond(b)
 
     cdef _copy_thisptr(self, ptr_from, pc_to):
         cdef res = ptr_from.GetCopy()
@@ -921,7 +1221,7 @@ cdef class nCad:
                                                    particle_info.z))
             new_particle.data[CUBA.CHEMICAL_SPECIE] = particle_info.specie
             new_particle.data[CUBA.LABEL] = particle_info.label
-            pc_to.add_particle(new_particle)
+            pc_to.add_particles([new_particle])
             # Add to the component!
             new_id = new_particle.uid
             # cur_particle.Simphony_ID = new_id.hex
@@ -953,7 +1253,7 @@ cdef class nCad:
             # print cur_bond.atom1, cur_bond.atom2
             new_bond = p.Bond(particles=(uuid.UUID(hex=cur_bond.atom1),
                                          uuid.UUID(hex=cur_bond.atom2)))
-            pc_to.add_bond(new_bond)
+            pc_to.add_bonds([new_bond])
             # Add to the component!
             new_id = new_bond.uid
             # cur_bond.Simphony_ID = new_id.hex
