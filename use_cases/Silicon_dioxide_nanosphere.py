@@ -12,7 +12,7 @@ sio2 = read_cd('../cd/sio2.cd')
 
 options = {}
 options['type'] = 'cell'
-sio2 = nc.add_particle_container(sio2, options)
+sio2 = nc.add_dataset(sio2, options)
 # ncad.show('sio2')
 
 sphere = Particles('sio2-sphere')
@@ -27,7 +27,7 @@ data[CUBA.SHAPE_RADIUS] = 25.0
 sphere.data = data
 
 options['type'] = 'component'
-sphere = nc.add_particle_container(sphere, options)
+sphere = nc.add_dataset(sphere, options)
 
 t_init = time.clock()
 assembly = nc.run()

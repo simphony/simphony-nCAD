@@ -30,8 +30,8 @@ def read_cd(file_name):
     # label way
     datoms_label = dict()
 
-    #??	data[CUBA.NAME] = name
-    #??	data[CUBA.NAME_UC] = name
+    #??    data[CUBA.NAME] = name
+    #??    data[CUBA.NAME_UC] = name
 
     tmp = f.readline()
     tmp = f.readline()
@@ -40,7 +40,7 @@ def read_cd(file_name):
     #print symmetry_name
     symmetry_number = symmetry.GetSymmetryNumberByHM(symmetry_name)
     if symmetry_number == -1:
-    	symmetry_number = 1 #??? default value???
+        symmetry_number = 1 #??? default value???
 
     # COMMENTED FTM AS WE DONT HAVE SYMMETRY_GROUP OFFICIALY IN THE CUBA LIST -
     # data[CUBA.SYMMETRY_GROUP] = symmetry_number
@@ -98,18 +98,18 @@ def read_cd(file_name):
         #print z
         occupancy = float(items[5])
         #print occupancy
-        # """		
+        # """        
         particle = Particle((x, y, z))
         particle.data[CUBA.CHEMICAL_SPECIE] = Element
         particle.data[CUBA.LABEL] = Label
         particle.data[CUBA.OCCUPANCY] = occupancy
-        particle_id = cell.add_particle(particle)
+        particle_id = cell.add_particles([particle])
         # ID way
         # fake ncad_id !!!
-        datoms_id[ncad_id] = particle_id
+        datoms_id[ncad_id] = particle_id[0]
         ncad_id += 1
         # label way
-        datoms_label[Label] = particle_id
+        datoms_label[Label] = particle_id[0]
 
         # """
 
@@ -130,12 +130,12 @@ def read_cd(file_name):
         ID2 = int(items[3])
         #print ID2
 
-        # """		
+        # """        
         # ID way
         bond = Bond((datoms_id[ID1], datoms_id[ID2]), uuid.uuid4())
         # label way
         bond = Bond((datoms_label[Label1], datoms_label[Label2]), uuid.uuid4())
-        cell.add_bond(bond)
+        cell.add_bonds([bond])
         # """
 
     return cell

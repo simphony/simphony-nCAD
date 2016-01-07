@@ -233,17 +233,17 @@ SymmmetryHM = [
 
 #counts from 1, returns -1 on error, case sensitive
 def GetSymmetryNumberByHM(symHM):
-        try:
-		return 1 + SymmmetryHM.index(symHM)
-	except:
-		return -1
+    try:
+        return 1 + SymmmetryHM.index(symHM)
+    except:
+        return -1
 
 #counts from 1, returns "" on error
 def GetSymmetryHMByNumber(sym_num):
-        try:
-		return SymmmetryHM[sym_num - 1]
-	except:
-		return ""
+    try:
+        return SymmmetryHM[sym_num - 1]
+    except:
+        return ""
 
 
 # Test -------------------------------------------------------
