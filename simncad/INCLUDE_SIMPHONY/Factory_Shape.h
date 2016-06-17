@@ -22,7 +22,8 @@ typedef enum {
     DIM_2D_HEXAGON     = 9,
     DIM_1D_BLOCK_UC    = 10, 
     DIM_1D_BLOCK_XYZ   = 11,
-    DIM_0D_ATOM_LIST   = 12
+    DIM_0D_ATOM_LIST   = 12,
+    DIM_3D_STL         = 13
 } SHAPETYPE;
 
 /**Struct to pass information from Cython side to C++ side.*/
@@ -36,6 +37,15 @@ struct shape_info
     double side; //for hexagon
     int rotation_axis1, rotation_axis2;
     double shape_rotation1[3], shape_rotation2[3];
+    string file_stl;
+    int mode;
+    float scaling;
+    float x_neg_padding;
+    float x_pos_padding;
+    float y_neg_padding;
+    float y_pos_padding;
+    float z_neg_padding;
+    float z_pos_padding;
     shape_info();
 };
 /**Type for shape_info struct.*/
@@ -61,6 +71,7 @@ private:
     static NC_Shape * CreateBlockUC_1D(CShapeInfo &shape);
     static NC_Shape * CreateBlockXYZ_1D(CShapeInfo &shape);
     static NC_Shape * CreateObject_0D(CShapeInfo &shape);
+    static NC_Shape * CreateSTL_3D(CShapeInfo &shape);
 public:
     /**Constructor.*/
     CFactory_Shape();

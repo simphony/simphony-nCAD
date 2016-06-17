@@ -135,6 +135,15 @@ cdef extern from "Factory_Shape.h":
         int rotation_axis1, rotation_axis2
         double shape_rotation1[3]
         double shape_rotation2[3]
+        string file_stl
+        int mode
+        float scaling
+        float x_neg_padding
+        float x_pos_padding
+        float y_neg_padding
+        float y_pos_padding
+        float z_neg_padding
+        float z_pos_padding
 
 cdef extern from "NCadSimphonyWrapper.h":
     ctypedef struct CParticleContainerInfo:

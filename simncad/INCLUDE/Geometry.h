@@ -118,6 +118,7 @@ public:
   Vector3DBox &TryRound(double eps = Vector3D::GravityEps);
   void Trace(ostream &os) const;
 };
+string AsString(const Vector3DBox &Box);
 ostream &operator << (ostream &os, const Vector3DBox &box);
 //istream &operator >> (istream &is, Vector3DBox &box);
 //==============================================================================

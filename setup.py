@@ -10,7 +10,7 @@ ncad_include_path = "./simncad/INCLUDE"
 with open('README.md', 'r') as readme:
     README_TEXT = readme.read()
 
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 
 def write_version_py(filename=None):
     if filename is None:
@@ -41,7 +41,7 @@ setup(
   description = 'NCad Wrapper for SimPhoNy',
   long_description = README_TEXT,
   packages = find_packages(),
-  install_requires = ['simphony', 'cython >= 0.21'],
+  install_requires = ['simphony >= 0.2.0', 'cython >= 0.21'],
   entry_points = {'simphony.engine': [ 'ncad_wrapper = simncad']
                   },
   cmdclass = {'build_ext': build_ext},

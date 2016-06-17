@@ -3,6 +3,7 @@
 
 /**@pkg _NC_SHAPES*/
 
+
 /**Class for 3D unit cell block */   
 //------------------------------------------------------------------------------
 class NC_WRAPPER_EXPORT NC_BlockUC_3D : public NC_ShapeNO_CAD
@@ -418,6 +419,58 @@ public:
 *   @returns 0D NO_CAD dimension domain
 */
   CompDomain GetCompDomain() const {return domainNoCAD_0D;}
+
+/**Getter for type name of the shape
+*   @returns Type name of the shape
+*/
+  const char *GetTypeName() const;
+
+/**Method for getting parameters of the shape
+*   @returns NULL in case of success or pointer to the error string in case of failure
+*/
+  ERR GetParameters(vector<string> &Parameters) const;
+};
+
+
+/**Class for 3D STL shapes */   
+//------------------------------------------------------------------------------
+class NC_WRAPPER_EXPORT NC_3D_STL : public NC_ShapeNO_CAD
+//------------------------------------------------------------------------------
+{
+public:
+
+/** path of stl file */
+  string file_stl;
+/** Cutting mode: 0 ==> normal; 1 ==> negative cutting */
+  int mode;
+/** Scaling factor */
+  float scaling;
+/** Extra padding for negative X direction */
+  float x_neg_padding;
+/** Extra padding for positive X direction */
+  float x_pos_padding;
+/** Extra padding for negative Y direction */
+  float y_neg_padding;
+/** Extra padding for positive Y direction */
+  float y_pos_padding;
+/** Extra padding for negative Z direction */
+  float z_neg_padding;
+/** Extra padding for positive Z direction */
+  float z_pos_padding;
+/**Constructor of NC_3D_STL class  */
+  NC_3D_STL(double ax, double ay, double az, string afile_stl, int amode, float ascaling,
+            float ax_neg_padding, float ax_pos_padding, float ay_neg_padding, float ay_pos_padding,
+            float az_neg_padding, float az_pos_padding, NC_ShapeOrientation *apOrientation = 0);
+/**Destructor */
+  ~NC_3D_STL();
+
+/**Getter for copy of shape */
+  NC_Shape *GetCopy() const;
+
+/**Method for getting shape domain
+*   @returns 0D NO_CAD dimension domain
+*/
+  CompDomain GetCompDomain() const {return domainNoCAD_3D;}
 
 /**Getter for type name of the shape
 *   @returns Type name of the shape

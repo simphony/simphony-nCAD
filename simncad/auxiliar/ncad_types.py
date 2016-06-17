@@ -11,7 +11,15 @@ class CUBA_EXT(IntEnum):
     CRYSTAL_ORIENTATION_2 = 71
     SHAPE_ORIENTATION_1 = 72
     SHAPE_ORIENTATION_2 = 73
-
+    FILE_STL = 74
+    STL_MODE = 75
+    STL_SCALING = 76
+    STL_X_NEG_PADDING = 77
+    STL_X_POS_PADDING = 78
+    STL_Y_NEG_PADDING = 79
+    STL_Y_POS_PADDING = 80
+    STL_Z_NEG_PADDING = 81
+    STL_Z_POS_PADDING = 82
 
 @unique
 class SHAPE_TYPE(IntEnum):
@@ -28,6 +36,7 @@ class SHAPE_TYPE(IntEnum):
     DIM_1D_BLOCK_UC    = 10 
     DIM_1D_BLOCK_XYZ   = 11
     DIM_0D_ATOM_LIST   = 12
+    DIM_3D_STL         = 13
 
 @unique
 class AXIS_TYPE(IntEnum):
