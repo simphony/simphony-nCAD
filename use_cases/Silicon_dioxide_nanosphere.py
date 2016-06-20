@@ -6,13 +6,11 @@ from simncad.auxiliar.ncad_types import SHAPE_TYPE, AXIS_TYPE
 from simncad.auxiliar.celldata_parser import read_cd
 
 
-nc = ncw.nCad('SiliconDioxideNanosphere')
+nc = ncw.nCad(project='SiliconDioxideNanosphere')
 
 sio2 = read_cd('../cd/sio2.cd')
 
-options = {}
-options['type'] = 'cell'
-sio2 = nc.add_dataset(sio2, options)
+sio2 = nc.add_dataset(sio2)
 # ncad.show('sio2')
 
 sphere = Particles('sio2-sphere')
@@ -26,8 +24,7 @@ data[CUBA.SHAPE_RADIUS] = 25.0
 # data[CUBA.SHAPE_ORIENTATION_1] = (AXIS_TYPE.X, (0,1,0))
 sphere.data = data
 
-options['type'] = 'component'
-sphere = nc.add_dataset(sphere, options)
+sphere = nc.add_dataset(sphere)
 
 t_init = time.clock()
 assembly = nc.run()

@@ -6,8 +6,10 @@ from simphony.core.data_container import DataContainer
 import simphony.cuds.particles as p
 from simphony.core.cuba import CUBA
 from simphony.core.cuds_item import CUDSItem
+from simphony.cuds.abc_particles import ABCParticles
 cimport c_ncad
 
+import random
 import copy
 import uuid
 from auxiliar.ncad_types import (
@@ -748,32 +750,38 @@ cdef class nCad:
     cdef object _components
     cdef object _cells
     cdef string _session_name
+    cdef object _cuds
     # --------------------
     cdef object CM
     cdef object BC
     cdef object SP
 
-    def __init__(self, *args):
+    def __init__(self, **kwargs):
         """Python constructor."""
         self._components = {}
         self._cells = {}
+        self._cuds = kwargs.get('cuds')
+        
 
-    def __cinit__(self, *args):
+    def __cinit__(self, **kwargs):
         """Cython constructor.
 
         Parameters
         ----------
-        args[0] : str
+        project : str
             the session name (project name) which ncad will use to store
             the data in physycal disk.
 
         """
-        self._session_name = args[0]
+        project_name = kwargs.get('project', None)
+        if project_name == None:
+            project_name = self._generate_project_name()
+        self._session_name = project_name
         if c_ncad.pCNCadSimphony is NULL:
             c_ncad.pCNCadSimphony = new c_ncad.CNCadSimphony()
         self.thisptr = c_ncad.pCNCadSimphony
         self.thisptr.LoadSession(self._session_name)
-
+        self._load_cuds()
 
     def __dealloc__(self):
         """Cython destructor."""
@@ -781,9 +789,30 @@ cdef class nCad:
         del self.thisptr
         self.thisptr = NULL
 
+    def _generate_project_name(self):
+        """We just use a random name."""
+        base = 'Project'
+        tag = str(random.random())
+        return base + tag
+
+    def get_project_name(self):
+        return str(self._session_name)
 
     # Common ABC interface ====================================================
     # =========================================================================
+    def _load_cuds(self):
+        """Loads the CUDS information into the engine."""
+        cuds = self.get_cuds()
+        if not cuds:
+            return
+
+        for component in cuds.iter(ABCParticles):
+            self.add_dataset(component)
+
+    def get_cuds(self):
+        """Get current CUDS instance."""
+        return self._cuds
+
     def run(self):
         """Run method of the nCad module.
 
@@ -814,7 +843,7 @@ cdef class nCad:
         del assembly
         return res
 
-    def add_dataset(self, container, options=None):
+    def add_dataset(self, container):
         """Add a CUDS container
 
         Parameters
@@ -831,18 +860,29 @@ cdef class nCad:
 
         """
         if isinstance(container, p.ABCParticles):
-            return self._add_particle_container(container, options)
+            return self._add_particle_container(container)
         else:
             raise TypeError('Not an ABCParticles item received.')
 
-    def _add_particle_container(self, pc, options=None):
+    def _check_type(self, pc):
+        """Checks the type (component or cell) depending on some mandatory
+           CUBA keys that must be present in the container.
+        """
+        data = pc.data
+        if CUBA.MATERIAL_TYPE in data:
+            return 'component'
+        if CUBA.SYMMETRY_GROUP in data:
+            return 'cell'
+        return None
+
+    def _add_particle_container(self, pc):
         """Adds a new particle container to nCad. It will be treated as
-        a cell or a component depending of the options['type'] parameter.
+        a cell or a component depending of the CUBA keys.
 
         Parameters
         ----------
-        options : dictionary
-            Dictionary containing some input parameters for nCad.
+        pc : particles object
+            the particle container
 
         Returns
         -------
@@ -856,11 +896,7 @@ cdef class nCad:
         previously.
 
         """
-        try:
-            type = options['type']
-        except KeyError:
-            raise KeyError('Error: "type" parameter was not in "options" '
-                           '(type="component" or type="cell")')
+        type = self._check_type(pc)
         if type is 'cell':
             if pc.name not in self._cells.keys():
                 return self._add_cell(pc)
@@ -872,8 +908,7 @@ cdef class nCad:
             else:
                 raise Exception('Duplicated component!')
         else:
-            raise Exception('Error: "type" parameter was incorrect '
-                            '(type="component" or type="cell")')
+            raise Exception('Error: the object type is not component or cell')
 
     def get_dataset(self, name):
         """ Get the dataset
