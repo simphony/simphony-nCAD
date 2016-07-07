@@ -41,7 +41,5 @@ print "Elapsed time: ", t_final-t_init
 print "N. atoms:     ", atoms_count
 print "N. bonds:     ", bonds_count
 
-
-nc.show('sio2-stl')
-
+# nc.show('sio2-stl')
 

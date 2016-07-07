@@ -63,6 +63,7 @@ cdef class _NCadParticles:
     def __dealloc__(self):
         """Cython destructor."""
         del self.thisptr
+        self.thisptr = NULL
 
     # Common ABC interface ====================================================
     # =========================================================================
