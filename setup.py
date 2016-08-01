@@ -10,7 +10,7 @@ ncad_include_path = "./simncad/INCLUDE"
 with open('README.md', 'r') as readme:
     README_TEXT = readme.read()
 
-VERSION = '0.2.1'
+VERSION = '0.3.0'
 
 def write_version_py(filename=None):
     if filename is None:
