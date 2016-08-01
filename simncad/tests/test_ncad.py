@@ -10,26 +10,27 @@ import simncad.ncad as ncw
 from simphony.cuds.particles import Particle, Bond, Particles
 from simphony.core.data_container import DataContainer
 from simphony.core.cuba import CUBA
-from simncad.auxiliar.ncad_types import SHAPE_TYPE
+from simncad.auxiliar.ncad_types import SHAPE_TYPE, SYMMETRY_GROUP
 from simphony.core.cuds_item import CUDSItem
+import simphony.engine as engine_api
+from simphony.engine import EngineInterface, create_wrapper
+from simphony import CUDS
 
 
 class NCadWrapperTestCase(unittest.TestCase):
     def setUp(self):
-        self.ncad = ncw.nCad('test_ncad' + str(random.random()))
+        self.ncad = ncw.nCad(project='test_ncad' + str(random.random()))
 
     def test_add_particle_container(self):
         # cell
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        returned_cell = self.ncad.add_dataset(cell, options)
+        returned_cell = self.ncad.add_dataset(cell)
         self.ncad.get_dataset(cell_name)
         self.assertIsNotNone(returned_cell)
         self.assertEqual(returned_cell.name, cell_name)
@@ -39,17 +40,16 @@ class NCadWrapperTestCase(unittest.TestCase):
         data = DataContainer()
         data[CUBA.NAME_UC] = cell_name
         # optional:
-        # data[CUBA_EXT.CRYSTAL_ORIENTATION_1] = ((1,2,3),(1,0,1))
-        # data[CUBA_EXT.CRYSTAL_ORIENTATION_2] = ((1,2,5),(1,1,1))
+        # data[CUBA.CRYSTAL_ORIENTATION_1] = ((1,2,3),(1,0,1))
+        # data[CUBA.CRYSTAL_ORIENTATION_2] = ((1,2,5),(1,1,1))
         data[CUBA.MATERIAL_TYPE] = SHAPE_TYPE.DIM_3D_SPHERE
         # optional:
-        # data[CUBA_EXT.SHAPE_ORIENTATION_1] = (AXIS_TYPE.X,(0,1,0))
-        # data[CUBA_EXT.SHAPE_ORIENTATION_2] = (AXIS_TYPE.Y,(0,1,1))
+        # data[CUBA.SHAPE_ORIENTATION_1] = (AXIS_TYPE.X,(0,1,0))
+        # data[CUBA.SHAPE_ORIENTATION_2] = (AXIS_TYPE.Y,(0,1,1))
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'component'
-        self.ncad.add_dataset(component, options)
+        self.ncad.add_dataset(component)
         returned_component = self.ncad.get_dataset(component_name)
         self.assertIsNotNone(returned_component)
         self.assertEqual(returned_component.name, component_name)
@@ -59,15 +59,13 @@ class NCadWrapperTestCase(unittest.TestCase):
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        self.ncad.add_dataset(cell, options)
+        self.ncad.add_dataset(cell)
         with self.assertRaises(Exception):
-            self.ncad.add_dataset(cell, options)
+            self.ncad.add_dataset(cell)
         # component
         component_name = 'component_pc' + str(random.random())
         component = Particles(name=component_name)
@@ -77,32 +75,27 @@ class NCadWrapperTestCase(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'component'
-        self.ncad.add_dataset(component, options)
+        self.ncad.add_dataset(component)
         with self.assertRaises(Exception):
-            self.ncad.add_dataset(component, options)
+            self.ncad.add_dataset(component)
 
     def test_exception_when_adding_incompleted_pc(self):
         # cell
         # we omit lattice parameters
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
-        options = {}
-        options['type'] = 'cell'
         # COMMENTED FTM AS WE DONT HAVE ANY MANDATORY CELL ATTRIBUTE
-        # with self.assertRaises(Exception):
-        #     self.ncad.add_dataset(cell, options)
+        with self.assertRaises(Exception):
+            self.ncad.add_dataset(cell)
         # we omit type
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
         cell.data = data
-        options = {}
         with self.assertRaises(Exception):
-            self.ncad.add_dataset(cell, options)
+            self.ncad.add_dataset(cell)
         # component
         # we omit cell name
         component_name = 'component_pc' + str(random.random())
@@ -112,22 +105,19 @@ class NCadWrapperTestCase(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'component'
         with self.assertRaises(Exception):
-            self.ncad.add_dataset(component, options)
+            self.ncad.add_dataset(component)
 
     def test_delete_particle_container(self):
         # cell
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        self.ncad.add_dataset(cell, options)
+        self.ncad.add_dataset(cell)
         self.ncad.remove_dataset(cell_name)
         with self.assertRaises(Exception):
             self.ncad.get_dataset(cell_name)
@@ -140,10 +130,8 @@ class NCadWrapperTestCase(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'cell'
-        self.ncad.add_dataset(cell, options)
-        options['type'] = 'component'
-        self.ncad.add_dataset(component, options)
+        self.ncad.add_dataset(cell)
+        self.ncad.add_dataset(component)
         self.ncad.remove_dataset(component_name)
         with self.assertRaises(Exception):
             self.ncad.get_dataset(component_name)
@@ -158,13 +146,11 @@ class NCadWrapperTestCase(unittest.TestCase):
         names.append(cell_name)
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        self.ncad.add_dataset(cell, options)
+        self.ncad.add_dataset(cell)
         component_name = 'component_pc' + str(random.random())
         names.append(component_name)
         component = Particles(name=component_name)
@@ -174,8 +160,7 @@ class NCadWrapperTestCase(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'component'
-        self.ncad.add_dataset(component, options)
+        self.ncad.add_dataset(component)
         for pc in self.ncad.iter_datasets():
             self.assertIn(pc.name, names)
 
@@ -185,13 +170,11 @@ class NCadWrapperTestCase(unittest.TestCase):
         names.append(cell_name)
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        self.ncad.add_dataset(cell, options)
+        self.ncad.add_dataset(cell)
         component_name = 'component_pc' + str(random.random())
         names.append(component_name)
         component = Particles(name=component_name)
@@ -201,8 +184,7 @@ class NCadWrapperTestCase(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'component'
-        self.ncad.add_dataset(component, options)
+        self.ncad.add_dataset(component)
         for pc in self.ncad.iter_datasets(names):
             self.assertIn(pc.name, names)
 
@@ -216,13 +198,11 @@ class NCadWrapperTestCase(unittest.TestCase):
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        ncad_cell = self.ncad.add_dataset(cell, options)
+        ncad_cell = self.ncad.add_dataset(cell)
         particle = Particle((0, 0, 0))
         particle.data[CUBA.CHEMICAL_SPECIE] = 'C'
         particle.data[CUBA.LABEL] = 'C1'
@@ -241,8 +221,7 @@ class NCadWrapperTestCase(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_LENGTH_UC] = (2, 2, 2)
         component.data = data
-        options['type'] = 'component'
-        self.ncad.add_dataset(component, options)
+        self.ncad.add_dataset(component)
         assembly = self.ncad.run()
         count = 0
         for part in assembly.iter_particles():
@@ -257,57 +236,52 @@ class NCadWrapperTestCase(unittest.TestCase):
         cell_name = 'cell_pc' + str(random.random())
         cell = Particles(name=cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        ncad_cell = self.ncad.add_dataset(cell, options)
+        ncad_cell = self.ncad.add_dataset(cell)
         cur_data = ncad_cell.get_data()
-        # cur_data[CUBA_EXT.LATTICE_UC_ABC] = (3,3,3)
-        # cur_data[CUBA_EXT.LATTICE_UC_ANGLES] = (45,60,120)
-        # cur_data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P213
+        cur_data[CUBA.LATTICE_UC_ABC] = (3,3,3)
+        cur_data[CUBA.LATTICE_UC_ANGLES] = (45,60,120)
+        cur_data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P213
         ncad_cell.set_data(cur_data)
         cur_data = ncad_cell.get_data()
-        # self.assertItemsEqual(cur_data[CUBA_EXT.LATTICE_UC_ABC], (3,3,3))
-        # self.assertItemsEqual(cur_data[CUBA_EXT.LATTICE_UC_ANGLES],
-        #                            (45,60,120))
-        # self.assertEqual(cur_data[CUBA_EXT.SYMMETRY_GROUP],
-        #                    SYMMETRY_GROUP.P213)
+        self.assertItemsEqual(cur_data[CUBA.LATTICE_UC_ABC], (3,3,3))
+        self.assertItemsEqual(cur_data[CUBA.LATTICE_UC_ANGLES],
+                                   (45,60,120))
+        self.assertEqual(cur_data[CUBA.SYMMETRY_GROUP],
+                           SYMMETRY_GROUP.P213)
 
         cell_name_replace = 'cell_pc_replace'
         cell = Particles(name=cell_name_replace)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         cell.data = data
-        options = {}
-        options['type'] = 'cell'
-        self.ncad.add_dataset(cell, options)
+        self.ncad.add_dataset(cell)
         # component
         component_name = 'component_pc' + str(random.random())
         component = Particles(name=component_name)
         data = DataContainer()
         data[CUBA.NAME_UC] = cell_name
-        # data[CUBA_EXT.CRYSTAL_ORIENTATION_1] = ((1,1,1),(0,1,0))
-        # data[CUBA_EXT.CRYSTAL_ORIENTATION_2] = ((1,0,0),(0,0,1))
-        # data[CUBA_EXT.SHAPE_ORIENTATION_1] = (AXIS_TYPE.X,(0,1,0))
-        # data[CUBA_EXT.SHAPE_ORIENTATION_2] = (AXIS_TYPE.Y,(0,0,1))
+        # data[CUBA.CRYSTAL_ORIENTATION_1] = ((1,1,1),(0,1,0))
+        # data[CUBA.CRYSTAL_ORIENTATION_2] = ((1,0,0),(0,0,1))
+        # data[CUBA.SHAPE_ORIENTATION_1] = (AXIS_TYPE.X,(0,1,0))
+        # data[CUBA.SHAPE_ORIENTATION_2] = (AXIS_TYPE.Y,(0,0,1))
         data[CUBA.MATERIAL_TYPE] = SHAPE_TYPE.DIM_3D_SPHERE
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         component.data = data
-        options['type'] = 'component'
-        ncad_component = self.ncad.add_dataset(component, options)
+        ncad_component = self.ncad.add_dataset(component)
         cur_data = ncad_component.get_data()
         cur_data[CUBA.NAME_UC] = cell_name_replace
         cur_data[CUBA.MATERIAL_TYPE] = SHAPE_TYPE.DIM_3D_CYLINDER
-        # cur_data[CUBA_EXT.CRYSTAL_ORIENTATION_1] = ((2,2,2),(1,0,1))
-        # cur_data[CUBA_EXT.CRYSTAL_ORIENTATION_2] = ((0,1,1),(1,1,0))
-        # cur_data[CUBA_EXT.SHAPE_ORIENTATION_1] = (AXIS_TYPE.Z,(1,0,1))
-        # cur_data[CUBA_EXT.SHAPE_ORIENTATION_2] = (AXIS_TYPE.X,(1,1,0))
+        # cur_data[CUBA.CRYSTAL_ORIENTATION_1] = ((2,2,2),(1,0,1))
+        # cur_data[CUBA.CRYSTAL_ORIENTATION_2] = ((0,1,1),(1,1,0))
+        # cur_data[CUBA.SHAPE_ORIENTATION_1] = (AXIS_TYPE.Z,(1,0,1))
+        # cur_data[CUBA.SHAPE_ORIENTATION_2] = (AXIS_TYPE.X,(1,1,0))
         cur_data[CUBA.SHAPE_CENTER] = (10, 20, 30)
         cur_data[CUBA.SHAPE_RADIUS] = 10.0
         cur_data[CUBA.SHAPE_LENGTH] = (20, 0, 0)
@@ -318,32 +292,29 @@ class NCadWrapperTestCase(unittest.TestCase):
         self.assertEqual(cur_data[CUBA.SHAPE_CENTER], (10, 20, 30))
         self.assertEqual(cur_data[CUBA.SHAPE_RADIUS], 10.0)
         self.assertEqual(cur_data[CUBA.SHAPE_LENGTH], (20, 0, 0))
-        # self.assertEqual(cur_data[CUBA_EXT.CRYSTAL_ORIENTATION_1],
+        # self.assertEqual(cur_data[CUBA.CRYSTAL_ORIENTATION_1],
         #                    ((2,2,2),(1,0,1)))
-        # self.assertEqual(cur_data[CUBA_EXT.CRYSTAL_ORIENTATION_2],
+        # self.assertEqual(cur_data[CUBA.CRYSTAL_ORIENTATION_2],
         #                    ((0,1,1),(1,1,0)))
-        # self.assertEqual(cur_data[CUBA_EXT.SHAPE_ORIENTATION_1],
+        # self.assertEqual(cur_data[CUBA.SHAPE_ORIENTATION_1],
         #                    (AXIS_TYPE.Z,(1,0,1)))
-        # self.assertEqual(cur_data[CUBA_EXT.SHAPE_ORIENTATION_2],
+        # self.assertEqual(cur_data[CUBA.SHAPE_ORIENTATION_2],
         #                    (AXIS_TYPE.X,(1,1,0)))
 
 
 class NCadParticlesTestCase1(unittest.TestCase):
     def setUp(self):
-        ncad_temp = ncw.nCad('test_ncad' + str(random.random()))
+        ncad_temp = ncw.nCad(project='test_ncad' + str(random.random()))
         self.ncad = ncad_temp
-        options = {}
-        options['type'] = 'cell'
         self.cell_name = 'cell_pc' + str(random.random())
         self.component_name = 'component_pc' + str(random.random())
         self.cell = Particles(name=self.cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         self.cell.data = data
-        self.cell = self.ncad.add_dataset(self.cell, options)
-        options['type'] = 'component'
+        self.cell = self.ncad.add_dataset(self.cell)
         self.component = Particles(name=self.component_name)
         data = DataContainer()
         data[CUBA.NAME_UC] = self.cell_name
@@ -351,7 +322,7 @@ class NCadParticlesTestCase1(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         self.component.data = data
-        self.component = self.ncad.add_dataset(self.component, options)
+        self.component = self.ncad.add_dataset(self.component)
 
     def test_add_particle(self):
         # cell
@@ -572,19 +543,17 @@ class NCadParticlesTestCase1(unittest.TestCase):
 
 class NCadParticlesTestCase2(unittest.TestCase):
     def setUp(self):
-        ncad_temp = ncw.nCad('test_ncad' + str(random.random()))
+        ncad_temp = ncw.nCad(project='test_ncad' + str(random.random()))
         self.ncad = ncad_temp
-        options = {}
-        options['type'] = 'cell'
         self.cell_name = 'cell_pc' + str(random.random())
         self.component_name = 'component_pc' + str(random.random())
         self.cell = Particles(name=self.cell_name)
         data = DataContainer()
-        # data[CUBA_EXT.LATTICE_UC_ABC] = (4,5,6)
-        # data[CUBA_EXT.LATTICE_UC_ANGLES] = (90,90,90)
-        # data[CUBA_EXT.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
+        data[CUBA.LATTICE_UC_ABC] = (4,5,6)
+        data[CUBA.LATTICE_UC_ANGLES] = (90,90,90)
+        data[CUBA.SYMMETRY_GROUP] = SYMMETRY_GROUP.P1
         self.cell.data = data
-        self.cell = self.ncad.add_dataset(self.cell, options)
+        self.cell = self.ncad.add_dataset(self.cell)
         particle = Particle((0, 0, 0))
         particle.data[CUBA.CHEMICAL_SPECIE] = 'C'
         particle.data[CUBA.LABEL] = 'C1'
@@ -594,7 +563,6 @@ class NCadParticlesTestCase2(unittest.TestCase):
         particle.data[CUBA.LABEL] = 'O1'
         self.particle_id_o1 = self.cell.add_particles([particle])[0]
         # ------------------------------------------------------------
-        options['type'] = 'component'
         self.component = Particles(name=self.component_name)
         data = DataContainer()
         data[CUBA.NAME_UC] = self.cell_name
@@ -602,7 +570,7 @@ class NCadParticlesTestCase2(unittest.TestCase):
         data[CUBA.SHAPE_CENTER] = (0, 0, 0)
         data[CUBA.SHAPE_RADIUS] = 5.0
         self.component.data = data
-        self.component = self.ncad.add_dataset(self.component, options)
+        self.component = self.ncad.add_dataset(self.component)
         particle = Particle((0, 0, 0))
         particle.data[CUBA.CHEMICAL_SPECIE] = 'B'
         particle.data[CUBA.LABEL] = 'B1'
@@ -757,6 +725,7 @@ class NCadParticlesTestCase2(unittest.TestCase):
             bond = Bond((self.particle_id_c1, self.particle_id_o1))
             self.cell.add_bonds([bond])
         self.assertEqual(self.cell.count_of(CUDSItem.BOND), n)
+
 
 if __name__ == '__main__':
     unittest.main()
