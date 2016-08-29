@@ -440,6 +440,13 @@ public:
     void AddCell(CNCadParticleContainer *Cell, double a, double b, double c,
                             double alpha, double beta, double gamma,
                             int symmetry_gn);
+    /**Creates a nanotube cell for 1D components.
+    @param Cell the particle container for creation
+    @param cells the nanotube layers cells
+    @param n_values the n value for the layers
+    @param m_values the m value for the layers.*/
+    void CreateNanotubeCell(CNCadParticleContainer *Cell, vector<string> &cells, vector<double> n_values,
+                            vector<double> m_values);
     /**Deletes the specified component from nCad.
     @param name the name of the component.*/
     void RemoveComponent(string &name);

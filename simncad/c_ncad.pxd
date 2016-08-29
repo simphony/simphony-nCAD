@@ -1,3 +1,4 @@
+from libcpp.vector cimport vector
 from libcpp.string cimport string
 from libcpp.map cimport map
 from libcpp cimport bool 
@@ -30,6 +31,8 @@ cdef extern from "NCadSimphonyWrapper.h":
         void AddCell(CNCadParticleContainer *Cell, double a, double b, double c,
                             double alpha, double beta, double gamma,
                             int symmetry_gn) except +get_error_cython
+        void CreateNanotubeCell(CNCadParticleContainer *Cell, vector[string] &cells, vector[double] n_values,
+                                vector[double] m_values) except +get_error_cython
         void RemoveComponent(string &name) except +get_error_cython
         void RemoveCell(string &name) except +get_error_cython
         void TraceAll()

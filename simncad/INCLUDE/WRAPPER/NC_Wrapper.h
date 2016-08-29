@@ -22,6 +22,14 @@ class NC_Cell;
 //typedef long id_t;
 typedef DWORD64 id_t;
 
+typedef struct 
+{
+    string cell;
+    double n;
+    double m;
+} NC_NanotubeLayer;
+
+
 /**Class that represents an atom */
 //------------------------------------------------------------------------------
 class NC_WRAPPER_EXPORT NC_Atom
@@ -159,7 +167,21 @@ public:
 */  
   virtual ERR DoAction(const NC_Bond  &Bond) = 0;
 };
+//------------------------------------------------------------------------------
+class NC_WRAPPER_EXPORT NC_Nanotube
+//------------------------------------------------------------------------------
+{
+public:
+    NC_Nanotube();
+    ~NC_Nanotube();
 
+    void AddLayer(const string& cell_name, double n, double m);
+    NC_Cell * BuildNanotubeCell();
+    NC_Cell * BuildTestNanotubeCell();
+
+private:
+    vector<NC_NanotubeLayer> layers;
+};
 //------------------------------------------------------------------------------
 class CellData;
 

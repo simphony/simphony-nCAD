@@ -932,7 +932,20 @@ cdef class nCad:
 
         """
         return self._get_particle_container(name)
-    
+
+    def get_dataset_names(self):
+        """Returns a list the dataset names in the engine's workspace.
+
+        Returns
+        -------
+        list :
+            list with the string names of the datasets.
+        """
+        names = []
+        for dataset in self.iter_datasets():
+            names.append(dataset.name)
+        return names
+
     def _get_particle_container(self, name):
         """Returns a _NCadParticles instance of the requested pc.
 
@@ -1220,7 +1233,14 @@ cdef class nCad:
         if (new_cell.name) in self._cells.keys():
             raise Exception('Duplicated particle container cell: {}'
                             .format(new_cell.name))
+
+        # Here we should do the checking for nanotube cells..
+        # 1. Check all the layers for the nanotube
+        # 2. Build the new cell
+        # 3. Apply the rest of parameters (if any)
+
         cdef _NCadParticles ncpc = _NCadParticles('cell')
+
         abc = new_cell.data[CUBA.LATTICE_UC_ABC]
         a = abc[0]
         b = abc[1]
