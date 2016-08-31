@@ -18,6 +18,7 @@
 //#include <iostream>
 //==============================================================================
 class NC_Cell;
+class Nanotube;
 
 //typedef long id_t;
 typedef DWORD64 id_t;
@@ -178,9 +179,12 @@ public:
     void AddLayer(const string& cell_name, double n, double m);
     NC_Cell * BuildNanotubeCell();
     NC_Cell * BuildTestNanotubeCell();
+    void SetMaxBondDistance(double distance);
 
 private:
     vector<NC_NanotubeLayer> layers;
+    Nanotube * pNanotube;
+    double MaxBondDistance;
 };
 //------------------------------------------------------------------------------
 class CellData;
@@ -750,13 +754,16 @@ public:
   NC_Material *pMaterial;
 /**Pointer on the component crystal orientation*/  
   NC_CrystalOrientation *pOrientation; //3D, 2D, 1D, 0D ??
+/**Pointer on nanotube info*/
+  NC_Nanotube *pNanotube;
 
 /**NC_Component class constructor */
   NC_Component(
      const string &aName,
      NC_Shape *apShape,
      NC_Material *apMaterial,
-     NC_CrystalOrientation *apOrientation = NULL); 
+     NC_CrystalOrientation *apOrientation = NULL,
+     NC_Nanotube *apNanotube = NULL); 
 
 /**Destructor */  
   ~NC_Component();

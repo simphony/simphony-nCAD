@@ -147,6 +147,8 @@ cdef extern from "Factory_Shape.h":
         float y_pos_padding
         float z_neg_padding
         float z_pos_padding
+        vector[int] ns
+        vector[int] ms
 
 cdef extern from "NCadSimphonyWrapper.h":
     ctypedef struct CParticleContainerInfo:

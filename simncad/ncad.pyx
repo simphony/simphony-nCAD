@@ -645,6 +645,11 @@ cdef class _NCadParticles:
             pc_info.shape_info.side = new_data[CUBA.SHAPE_SIDE]
         if CUBA.NAME_UC in new_data:
             pc_info.name_uc = new_data[CUBA.NAME_UC]
+        if CUBA.NANOTUBE_WALLS in new_data:
+            walls = new_data[CUBA.NANOTUBE_WALLS]
+            for wall in walls:
+                pc_info.shape_info.ns.push_back(wall[0])
+                pc_info.shape_info.ms.push_back(wall[1])
         self.thisptr.Update(pc_info)
         self._data = new_data
 
@@ -1212,6 +1217,14 @@ cdef class nCad:
             pc_info.shape_info.radius = new_component.data[CUBA.SHAPE_RADIUS]
         if CUBA.SHAPE_SIDE in new_component.data:
             pc_info.shape_info.side = new_component.data[CUBA.SHAPE_SIDE]
+        # Here treat the nanotube info in case we have it!
+        # Put it inside pc_info! #NANOTUBE
+        if CUBA.NANOTUBE_WALLS in new_component.data:
+            walls = new_component.data[CUBA.NANOTUBE_WALLS]
+            for wall in walls:
+                pc_info.shape_info.ns.push_back(wall[0])
+                pc_info.shape_info.ms.push_back(wall[1])
+
         self.thisptr.AddComponent(
                 <c_ncad.CNCadParticleContainer *>(ncpc.thisptr),
                 cell_name,

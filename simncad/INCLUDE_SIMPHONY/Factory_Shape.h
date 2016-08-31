@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 #define INVALID -999999
 
 using namespace std;
@@ -46,6 +47,9 @@ struct shape_info
     float y_pos_padding;
     float z_neg_padding;
     float z_pos_padding;
+    //Nanotube Ns and Ms
+    vector<int> ns;
+    vector<int> ms;
     shape_info();
 };
 /**Type for shape_info struct.*/
